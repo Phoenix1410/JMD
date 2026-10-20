@@ -1,0 +1,182 @@
+[
+  {
+    "id": "b_01",
+    "name_en": "Kolkata Central",
+    "name_hi": "कोलकाता सेंट्रल",
+    "address_en": "123 Central Avenue, Kolkata, WB 700001",
+    "address_hi": "123 सेंट्रल एवेन्यू, कोलकाता, प.बं. 700001",
+    "contact": "+91 9775531166",
+    "map_link": "https://maps.google.com/?q=22.5726,88.3639"
+  },
+  {
+    "id": "b_02",
+    "name_en": "Kolkata Howrah Logistics Hub",
+    "name_hi": "कोलकाता हावड़ा लॉजिस्टिक्स हब",
+    "address_en": "Plot 45, Kona Expressway, Howrah, WB 711102",
+    "address_hi": "प्लाट 45, कोना एक्सप्रेसवे, हावड़ा, प.बं. 711102",
+    "contact": "+91 9775531167",
+    "map_link": "https://maps.google.com/?q=22.5958,88.2636"
+  },
+  {
+    "id": "b_03",
+    "name_en": "Mumbai Andheri Cargo Terminal",
+    "name_hi": "मुंबई अंधेरी कार्गो टर्मिनल",
+    "address_en": "Unit 12, Sakinaka Junction, Andheri East, Mumbai, MH 400072",
+    "address_hi": "यूनिट 12, साकीनाका जंक्शन, अंधेरी पूर्व, मुंबई, महाराष्ट्र 400072",
+    "contact": "+91 9820012345",
+    "map_link": "https://maps.google.com/?q=19.1136,72.8697"
+  },
+  {
+    "id": "b_04",
+    "name_en": "Mumbai Bhiwandi Warehousing Hub",
+    "name_hi": "मुंबई भिवंडी वेयरहाउसिंग हब",
+    "address_en": "Survey No 88, Mumbai-Nashik Highway, Bhiwandi, Thane, MH 421302",
+    "address_hi": "सर्वे नं 88, मुंबई-नासिक हाईवे, भिवंडी, ठाणे, महाराष्ट्र 421302",
+    "contact": "+91 9820012346",
+    "map_link": "https://maps.google.com/?q=19.2967,73.0631"
+  },
+  {
+    "id": "b_05",
+    "name_en": "Delhi Okhla Industrial Area",
+    "name_hi": "दिल्ली ओखला औद्योगिक क्षेत्र",
+    "address_en": "Phase II, Okhla Industrial Area, New Delhi, DL 110020",
+    "address_hi": "फेज II, ओखला इंडस्ट्रियल एरिया, नई दिल्ली, दिल्ली 110020",
+    "contact": "+91 9811098765",
+    "map_link": "https://maps.google.com/?q=28.5355,77.2732"
+  },
+  {
+    "id": "b_06",
+    "name_en": "Delhi Connaught Place",
+    "name_hi": "दिल्ली कनॉट प्लेस",
+    "address_en": "B-Block, Inner Circle, Connaught Place, New Delhi, DL 110001",
+    "address_hi": "बी-ब्लॉक, इनर सर्कल, कनॉट प्लेस, नई दिल्ली, दिल्ली 110001",
+    "contact": "+91 9811098766",
+    "map_link": "https://maps.google.com/?q=28.6315,77.2167"
+  },
+  {
+    "id": "b_07",
+    "name_en": "Bengaluru Peenya Industrial Estate",
+    "name_hi": "बेंगलुरु पीन्या औद्योगिक क्षेत्र",
+    "address_en": "14th Cross, 2nd Stage, Peenya Industrial Area, Bengaluru, KA 560058",
+    "address_hi": "14वां क्रॉस, दूसरा चरण, पीन्या इंडस्ट्रियल एरिया, बेंगलुरु, कर्नाटक 560058",
+    "contact": "+91 9845011223",
+    "map_link": "https://maps.google.com/?q=13.0285,77.5197"
+  },
+  {
+    "id": "b_08",
+    "name_en": "Bengaluru Whitefield Hub",
+    "name_hi": "बेंगलुरु व्हाइटफील्ड हब",
+    "address_en": "Hoodi Circle, ITPL Main Road, Whitefield, Bengaluru, KA 560066",
+    "address_hi": "हूडी सर्कल, आईटीपीएल मेन रोड, व्हाइटफील्ड, बेंगलुरु, कर्नाटक 560066",
+    "contact": "+91 9845011224",
+    "map_link": "https://maps.google.com/?q=12.9698,77.7500"
+  },
+  {
+    "id": "b_09",
+    "name_en": "Chennai Guindy Industrial Estate",
+    "name_hi": "चेन्नई गिंडी औद्योगिक क्षेत्र",
+    "address_en": "SIDCO Industrial Estate, Guindy, Chennai, TN 600032",
+    "address_hi": "सिडको इंडस्ट्रियल एस्टेट, गिंडी, चेन्नई, तमिलनाडु 600032",
+    "contact": "+91 9840033445",
+    "map_link": "https://maps.google.com/?q=13.0067,80.2038"
+  },
+  {
+    "id": "b_10",
+    "name_en": "Hyderabad HITEC Logistics",
+    "name_hi": "हैदराबाद हाईटेक लॉजिस्टिक्स",
+    "address_en": "Near Cyber Towers, Madhapur, Hyderabad, TS 500081",
+    "address_hi": "साइबर टॉवर्स के पास, माधापुर, हैदराबाद, तेलंगाना 500081",
+    "contact": "+91 9849055667",
+    "map_link": "https://maps.google.com/?q=17.4474,78.3762"
+  },
+  {
+    "id": "b_11",
+    "name_en": "Ahmedabad Sarkhej Transport Nagar",
+    "name_hi": "अहमदाबाद सरखेज ट्रांसपोर्ट नगर",
+    "address_en": "Sarkhej-Sanand Highway, Sarkhej, Ahmedabad, GJ 382210",
+    "address_hi": "सरखेज-साणंद हाईवे, सरखेज, अहमदाबाद, गुजरात 382210",
+    "contact": "+91 9825077889",
+    "map_link": "https://maps.google.com/?q=22.9833,72.5000"
+  },
+  {
+    "id": "b_12",
+    "name_en": "Pune Bhosari MIDC",
+    "name_hi": "पुणे भोसरी एमआईडीसी",
+    "address_en": "Plot 24, Block G, Bhosari MIDC, Pune, MH 411026",
+    "address_hi": "प्लाट 24, ब्लॉक जी, भोसरी एमआईडीसी, पुणे, महाराष्ट्र 411026",
+    "contact": "+91 9822088990",
+    "map_link": "https://maps.google.com/?q=18.6279,73.8447"
+  },
+  {
+    "id": "b_13",
+    "name_en": "Patna Transport Nagar",
+    "name_hi": "पटना ट्रांसपोर्ट नगर",
+    "address_en": "Old Bypass Road, Kumhrar, Patna, BR 800026",
+    "address_hi": "ओल्ड बाईपास रोड, कुम्हरार, पटना, बिहार 800026",
+    "contact": "+91 9431011223",
+    "map_link": "https://maps.google.com/?q=25.5941,85.1756"
+  },
+  {
+    "id": "b_14",
+    "name_en": "Lucknow Transport Nagar",
+    "name_hi": "लखनऊ ट्रांसपोर्ट नगर",
+    "address_en": "Sector 3, Kanpur Road, Transport Nagar, Lucknow, UP 226012",
+    "address_hi": "सेक्टर 3, कानपुर रोड, ट्रांसपोर्ट नगर, लखनऊ, उत्तर प्रदेश 226012",
+    "contact": "+91 9415022334",
+    "map_link": "https://maps.google.com/?q=26.7820,80.8900"
+  },
+  {
+    "id": "b_15",
+    "name_en": "Jaipur Vishwakarma Industrial Area",
+    "name_hi": "जयपुर विश्वकर्मा औद्योगिक क्षेत्र",
+    "address_en": "Road No 9, VKI Area, Sikar Road, Jaipur, RJ 302013",
+    "address_hi": "रोड नंबर 9, वीकेआई एरिया, सीकर रोड, जयपुर, राजस्थान 302013",
+    "contact": "+91 9414033445",
+    "map_link": "https://maps.google.com/?q=26.9855,75.7667"
+  },
+  {
+    "id": "b_16",
+    "name_en": "Guwahati Beltola Hub",
+    "name_hi": "गुवाहाटी बेलतोला हब",
+    "address_en": "Near National Highway 37, Beltola Chariali, Guwahati, AS 781028",
+    "address_hi": "राष्ट्रीय राजमार्ग 37 के पास, बेलतोला चारियाली, गुवाहाटी, असम 781028",
+    "contact": "+91 9435044556",
+    "map_link": "https://maps.google.com/?q=26.1264,91.7968"
+  },
+  {
+    "id": "b_17",
+    "name_en": "Ranchi Namkum Industrial Area",
+    "name_hi": "राँची नामकुम औद्योगिक क्षेत्र",
+    "address_en": "Tata Road, Namkum, Ranchi, JH 834010",
+    "address_hi": "टाटा रोड, नामकुम, राँची, झारखंड 834010",
+    "contact": "+91 9431155667",
+    "map_link": "https://maps.google.com/?q=23.3364,85.3789"
+  },
+  {
+    "id": "b_18",
+    "name_en": "Bhubaneswar Mancheswar Industrial Estate",
+    "name_hi": "भुवनेश्वर मंचेश्वर औद्योगिक क्षेत्र",
+    "address_en": "Sector A, Mancheswar IE, Bhubaneswar, OD 751010",
+    "address_hi": "सेक्टर ए, मंचेश्वर आईई, भुवनेश्वर, ओडिशा 751010",
+    "contact": "+91 9437066778",
+    "map_link": "https://maps.google.com/?q=20.3168,85.8643"
+  },
+  {
+    "id": "b_19",
+    "name_en": "Indore Sanwer Road Industrial Area",
+    "name_hi": "इंदौर सांवेर रोड औद्योगिक क्षेत्र",
+    "address_en": "Sector C, Sanwer Road Industrial Area, Indore, MP 452015",
+    "address_hi": "सेक्टर सी, सांवेर रोड इंडस्ट्रियल एरिया, इंदौर, मध्य प्रदेश 452015",
+    "contact": "+91 9826077889",
+    "map_link": "https://maps.google.com/?q=22.7533,75.8637"
+  },
+  {
+    "id": "b_20",
+    "name_en": "Ludhiana Focal Point",
+    "name_hi": "लुधियाना फोकल पॉइंट",
+    "address_en": "Phase V, Focal Point, Ludhiana, PB 141010",
+    "address_hi": "फेज V, फोकल पॉइंट, लुधियाना, पंजाब 141010",
+    "contact": "+91 9814088990",
+    "map_link": "https://maps.google.com/?q=30.8872,75.9182"
+  }
+]

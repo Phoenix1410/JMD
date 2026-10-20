@@ -1,0 +1,241 @@
+.customMarquee {
+  overflow: hidden;
+  width: 100%;
+}
+
+.marqueeTrack {
+  display: flex;
+  flex-wrap: nowrap;
+  width: fit-content;
+  animation: scroll 1000s linear infinite;
+  will-change: transform;
+}
+
+.customMarquee.rtl .marqueeTrack {
+  animation-direction: reverse;
+}
+
+.marqueeItem {
+  flex: 0 0 auto;
+  padding: 0 25px;
+}
+
+/* IMPORTANT */
+.marqueeItem img {
+  display: block;
+}
+
+/* PERFECT LOOP */
+@keyframes scroll {
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pause on hover */
+.customMarquee:hover .marqueeTrack {
+  animation-play-state: paused;
+}
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+  animation: scroll 50s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+
+/* ---------------Modal css ------------- */
+/* ===== Overlay ===== */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 18, 34, 0.85);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* padding-top: 120px; */
+  z-index: 9999;
+}
+
+/* ===== Modal Box ===== */
+.modalContainer {
+  width: 92%;
+  max-width: 1100px;
+  background: linear-gradient(135deg, #10243d, #1a3454);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  animation: slideDown 0.35s ease;
+}
+
+/* ===== Header ===== */
+.modalHeader {
+  padding: 22px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modalHeader h3 {
+  color: #fff;
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+  position: relative;
+}
+
+.modalHeader h3::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 60px;
+  height: 3px;
+  background: #ffc107;
+  border-radius: 2px;
+}
+
+/* ===== Close Button ===== */
+.closeBtn {
+  background: transparent;
+  border: 1px solid #ffc107;
+  color: #ffc107;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.closeBtn:hover {
+  background: #ffc107;
+  color: #000;
+}
+
+/* ===== Table Wrapper ===== */
+.tableWrapper {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 0 20px 20px 20px;
+}
+
+/* ===== Table ===== */
+.table {
+  margin-bottom: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table thead {
+  background: #132a47;
+}
+
+.table thead th {
+  color: #ffc107;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 14px 16px;
+  border: none;
+  text-align: left;
+}
+
+.table tbody td {
+  padding: 14px 16px;
+  color: #e4e4e4;
+  font-size: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.table tbody tr:hover {
+  background: rgba(255, 193, 7, 0.07);
+}
+
+/* ===== Empty State ===== */
+.noDataRow td {
+  text-align: center;
+  padding: 40px 0;
+  color: #aaa;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+}
+
+/* ===== Scrollbar ===== */
+.tableWrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tableWrapper::-webkit-scrollbar-thumb {
+  background: #ffc107;
+  border-radius: 20px;
+}
+
+/* ===== Animation ===== */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Remove all default borders */
+.table,
+.table th,
+.table td {
+  border: none !important;
+}
+
+/* Header */
+.table thead {
+  background: #132a47;
+}
+
+.table thead th {
+  color: #ffc107;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 16px 18px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Body */
+.table tbody td {
+  padding: 18px;
+  color: #e6e6e6;
+  font-size: 14px;
+}
+
+/* Subtle row separator only */
+.table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Remove last row border */
+.table tbody tr:last-child {
+  border-bottom: none;
+}
+
+/* Hover effect */
+.table tbody tr:hover {
+  background: rgba(255, 193, 7, 0.06);
+}
+.table tbody tr {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+}
+.search-box-branch{
+  padding: 0 20px 20px 20px;
+}
+@media only screen and (max-width: 991px) {
+.modalContainer .searchField {width: 100%;}
+.marqueeItem {
+    padding: 0 0px;
+}
+}

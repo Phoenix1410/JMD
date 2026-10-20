@@ -1,0 +1,217 @@
+# TASK: Build a Production Embeddable Bilingual Chatbot Widget for Paarcel3u.in
+
+## 1. OBJECTIVE & ARCHITECTURE
+Build an embeddable, lightweight, standalone frontend chat widget (HTML5, CSS3, vanilla ES6+ JavaScript) that integrates onto an existing static landing page (http://paarcel3u.in). 
+- Do NOT use heavy external frameworks (No React/Vue runtime overhead). 
+- The widget must be a single self-contained embed script or bundle with zero global CSS pollution (use scoped CSS or Shadow DOM).
+- State-driven rule engine (No LLM calls required; strictly deterministic decision-tree logic).
+- Bilingual: English and Hindi (Devanagari script only).
+
+---
+
+## 2. DATA SPECIFICATIONS
+
+### A. Local Static Branch Data (`branches.json`)
+Preload or fetch on initialization. Do NOT query a search backend for branches; perform client-side filtering over this dataset (approx. 30–40 branches, <15KB payload).
+Schema:
+```json
+[
+  {
+    "id": "b_01",
+    "name_en": "Kolkata Central",
+    "name_hi": "कोलकाता सेंट्रल",
+    "address_en": "123 Central Avenue, Kolkata, WB 700001",
+    "address_hi": "123 सेंट्रल एवेन्यू, कोलकाता, प.बं. 700001",
+    "contact": "+91 9775531166",
+    "map_link": "https://maps.google.com/?q=22.5726,88.3639"
+  }
+]
+
+B. Tracking API Contract
+
+  - Endpoint: GET /api/track?id={TRACKING_ID} (Provide mock/fallback data mode
+    if backend is unavailable).
+  - Expected Response (200 OK):
+
+{
+  "tracking_id": "P3U1001",
+  "status_en": "In Transit",
+  "status_hi": "रास्ते में है",
+  "eta": "2026-10-15 18:00",
+  "branch_contact": "+91 9775531166",
+  "branch_map_url": "https://maps.google.com/?q=..."
+}
+
+  - Error Responses: 404 (Not Found) or 500 (Server Error).
+
+C. Support Query Submission Contract
+
+  - Endpoint: POST /api/support/ticket
+  - Payload:
+
+{
+  "query": "string",
+  "contact": "string",
+  "language": "en" | "hi",
+  "timestamp": "ISO8601"
+}
+
+3. STRICT STATE MACHINE & CONVERSATION WORKFLOW
+
+State 0: INIT / LANG_SELECT
+
+  - Display bot bubble:
+      - English: "Please select your language / कृपया अपनी भाषा चुनें:"
+  - Options (Quick-reply buttons):
+      - [ English ] -> Set lang = 'en', transition to MAIN_MENU
+      - [ हिंदी ] -> Set lang = 'hi', transition to MAIN_MENU
+
+State 1: MAIN_MENU
+
+  - Display bot bubble:
+      - EN: "How can I help you today?"
+      - HI: "आज हम आपकी क्या सहायता कर सकते हैं?"
+  - Options (Quick-reply buttons):
+    1.  [ 📦 Track your shipment ] / [ 📦 पार्सल ट्रैक करें ] -> transition to
+        TRACK_PROMPT
+    2.  [ 📍 Branch details ] / [ 📍 शाखा की जानकारी ] -> transition to
+        BRANCH_INPUT
+    3.  [ 💬 Tell us about your query ] / [ 💬 अपनी समस्या बताएं ] -> transition
+        to QUERY_INPUT
+
+State 2: Flow 1 — Tracking (TRACK_PROMPT)
+
+1.  Bot Message:
+      - EN: "Please enter your Tracking ID:"
+      - HI: "कृपया अपना ट्रैकिंग नंबर दर्ज करें:"
+2.  User Input Handling:
+      - Sanitize: Strip all whitespace.
+      - Regex Validation: Must match /^[A-Za-z0-9]{4,25}$/.
+      - If invalid:
+          - EN: "Invalid Tracking ID. Please enter a valid alphanumeric code."
+          - HI: "अमान्य ट्रैकिंग नंबर। कृपया सही अक्षरांकीय कोड दर्ज करें।"
+          - Re-prompt input.
+3.  API Call (GET /api/track):
+      - Show loading spinner/typing indicator.
+      - On Success (200): Render rich card:
+        EN:
+        "Hi! Thank you for reaching out to Paarcel3u.
+         Here is the current status of your shipment:
+         ● Status: {status_en}
+         ● Estimated Delivery: {eta}
+         ● Branch Contact: {branch_contact}
+         ● Directions: [View on Google Maps]({branch_map_url})"
+
+        HI:
+        "Paarcel3u से संपर्क करने के लिए धन्यवाद।
+         आपके पार्सल की वर्तमान स्थिति:
+         ● स्थिति: {status_hi}
+         ● अनुमानित डिलीवरी: {eta}
+         ● शाखा संपर्क: {branch_contact}
+         ● दिशा-निर्देश: [Google Maps पर देखें]({branch_map_url})"
+      - On 404 (Not Found):
+          - EN: "No shipment found with ID '{id}'. Please check the tracking
+            number and try again."
+          - HI: "आईडी '{id}' का कोई पार्सल नहीं मिला। कृपया नंबर जांचें और पुनः
+            प्रयास करें।"
+      - On 500 / Network Error:
+          - EN: "Unable to retrieve tracking details right now. Please try again
+            shortly."
+          - HI: "सर्वर से संपर्क नहीं हो पा रहा है। कृपया कुछ समय बाद पुनः
+            प्रयास करें।"
+4.  Action: Display button [ ⬅ Main Menu / मुख्य मेन्यू ] -> transitions back to
+    MAIN_MENU.
+
+State 3: Flow 2 — Branch Details (BRANCH_INPUT)
+
+1.  Bot Message:
+      - EN: "Type the branch name or city:"
+      - HI: "शाखा या शहर का नाम लिखें:"
+2.  Dynamic Autocomplete Input:
+      - As the user types into the input field (debounced ~150ms), filter
+        branches.json matching name_en, name_hi, address_en, or address_hi.
+      - Render a floating suggestion list above/inside the chat input (Max 4
+        suggestions).
+      - If user clicks a suggestion OR hits enter on an exact match:
+          - Render Branch Details Card:
+            EN:
+            "Here are our branch details:
+             ● Branch: {name_en}
+             ● Address: {address_en}
+             ● Contact: {contact}
+             ● Location: [View on Google Maps]({map_link})"
+
+            HI:
+            "शाखा का विवरण:
+             ● शाखा: {name_hi}
+             ● पता: {address_hi}
+             ● संपर्क: {contact}
+             ● स्थान: [Google Maps पर देखें]({map_link})"
+      - If user submits text with zero matches:
+          - EN: "No matching branch found. Please verify the branch name."
+          - HI: "कोई शाखा नहीं मिली। कृपया नाम की जांच करें।"
+3.  Action: Display button [ ⬅ Main Menu / मुख्य मेन्यू ] -> transitions back to
+    MAIN_MENU.
+
+State 4: Flow 3 — Support Query (QUERY_INPUT -> CONTACT_INPUT)
+
+1.  Prompt 1 (Query description):
+      - EN: "Please describe your query or problem in detail:"
+      - HI: "कृपया अपनी समस्या या प्रश्न का विवरण लिखें:"
+2.  User Enters Query: Store in temporary state pendingTicket.query.
+3.  Prompt 2 (Contact Info):
+      - EN: "Please enter your 10-digit mobile number or email address so our
+        executive can contact you:"
+      - HI: "कृपया अपना 10 अंकों का मोबाइल नंबर या ईमेल आईडी दर्ज करें ताकि
+        हमारे प्रतिनिधि आपसे संपर्क कर सकें:"
+4.  User Input Validation:
+      - Validate against:
+          - Mobile: /^[6-9]\d{9}$/
+          - Email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      - If invalid:
+          - EN: "Please enter a valid 10-digit Indian mobile number or email
+            address."
+          - HI: "कृपया एक मान्य 10 अंकों का मोबाइल नंबर या ईमेल आईडी दर्ज करें।"
+          - Re-prompt contact input.
+5.  Submission:
+      - Trigger POST /api/support/ticket.
+      - Render Acknowledgment:
+        EN:
+        "Thank you for contacting Paarcel3u. Our customer support executive will contact you at the earliest. Wishing you a great day ahead!
+
+         Thanks for talking! Glad we could help you today. 😊 If you need any more help with your package later, just send us a message anytime! Have a great day! 🙏"
+
+        HI:
+        "Paarcel3u से संपर्क करने के लिए धन्यवाद। हमारे कस्टमर सपोर्ट अधिकारी जल्द ही आपसे संपर्क करेंगे। आपका दिन शुभ हो!
+
+         बातचीत के लिए धन्यवाद! हमें आपकी सहायता करके खुशी हुई। 😊 भविष्य में सहायता के लिए कभी भी संपर्क करें। आपका दिन मंगलमय हो! 🙏"
+6.  Action: Display button [ Start New Chat / नई बातचीत शुरू करें ] -> resets to
+    INIT.
+
+4. UI / UX IMPLEMENTATION REQUIREMENTS
+
+1.  Floating Trigger: Floating circular chat button anchored at bottom-right
+    (bottom: 24px; right: 24px; z-index: 999999;).
+2.  Chat Window Dimensions: Max width 380px, max height 580px, responsive
+    full-screen on mobile viewports (max-width: 480px).
+3.  Typography & Styling: Clean, modern font stack with explicit Devanagari font
+    fallbacks (system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans
+    Devanagari', sans-serif).
+4.  Branding: Match Paarcel3u palette (Clean deep blue/crimson/white accents).
+5.  Header Controls: Include "Close" (×) and "Reset" buttons in the chat widget
+    header.
+6.  Security & Sanitization: Escape all user text before injecting into the DOM
+    (textContent or sanitized strings) to prevent XSS.
+
+5. OUTPUT DELIVERABLES
+
+Generate:
+
+1.  chatbot.js: Complete vanilla JS logic handling state transitions,
+    autocomplete, API lookups, and DOM rendering.
+2.  chatbot.css: Scoped CSS styles for the widget and launcher button.
+3.  branches.json: Sample dataset containing at least 5 realistic Indian branch
+    objects matching the schema.
+4.  index.html: Quick integration test page demonstrating how the widget mounts
+    into http://paarcel3u.in.
+

@@ -1,0 +1,614 @@
+.content_one span {
+  display: flex;
+  gap: 1rem;
+}
+.content_one span p:last-child {
+  color: #010101;
+  font-weight: 500;
+}
+
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 255);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+  min-height: 200px;
+}
+.tab-content .loading-screen {
+  position: inherit;
+}
+
+/* Spinner animation */
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(0, 0, 0, 0.2);
+  border-top: 5px solid #e9a822;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.phoneInputField {
+  width: 100%;
+}
+.PhoneInputCountry {
+  background: #ffffff80;
+  padding: 0 10px;
+  font-size: 20px;
+}
+
+/* .menu ul.slimmenu li {
+    margin-right: 30px;
+}
+
+.menu ul.slimmenu li a {
+    font-size: 16px;
+    color: #454B36;
+    text-transform: uppercase;
+    font-weight: 400;
+    position: relative;
+}
+
+.menu ul.slimmenu li a:hover,
+.menu ul.slimmenu li.current-menu-item a {
+    font-weight: 600;
+    color: #E9A822;
+    letter-spacing: 1;
+}
+
+.menu ul.slimmenu li a:before {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 2px;
+    background: #E9A822;
+    bottom: -5px;
+    left: 0;
+    transition: all 0.35s ease-in-out;
+    -webkit-transition: all 0.35s ease-in-out;
+    -o-transition: all 0.35s ease-in-out;
+    -ms-transition: all 0.35s ease-in-out;
+}
+
+.menu ul.slimmenu li a:hover:before,
+.menu ul.slimmenu li.current-menu-item a:before {
+    width: 100%;
+} */
+
+.modalContainer .searchField {
+  width: 60%;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  outline: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.modalContainer .searchField::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.modalContainer .searchField:focus {
+  border-color: #f7c600;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 0 2px rgba(247, 198, 0, 0.2);
+}
+.seemore-btn {
+  color: #e9a822;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 5px;
+}
+.seemore-btn:hover {
+  color: #010101;
+}
+.tableWrapper {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.tableWrapper thead th {
+  position: sticky;
+  top: 0;
+  background: #092e47;
+  z-index: 10;
+}
+.job-card {
+  background: #facfcf;
+  border-radius: 6px;
+  color: #000;
+}
+
+.btn-purple {
+  background: #8a2be2;
+  color: #000;
+  border: none;
+}
+.secviceItem {
+  /* cursor: pointer; */
+  transition: all 0.3s ease;
+}
+.secviceItem:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+.btn-purple:hover {
+  background: #7326bd;
+}
+/* Career Section */
+.career-list {
+  margin-top: 40px;
+}
+.service-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+.service-popup-container {
+  background: white;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  animation: slideIn 0.3s ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.service-popup-close {
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 32px;
+  cursor: pointer;
+  color: #333;
+  z-index: 10;
+  transition: color 0.3s;
+}
+
+.service-popup-close:hover {
+  color: #ff0000;
+}
+
+.service-popup-content {
+  padding: 30px;
+  text-align: center;
+}
+
+.service-popup-image {
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  justify-content: center;
+  display: flex;
+}
+
+.service-popup-image img {
+  width: 100%;
+  height: 100%;
+  max-width: 217px;
+  object-fit: cover;
+}
+
+.service-popup-icon {
+  width: 70px;
+  height: 70px;
+  margin: -35px auto 15px;
+  background: white;
+  border-radius: 50%;
+  padding: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.service-popup-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.service-popup-content h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.service-popup-text {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.service-popup-text p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #666;
+}
+
+.service-popup-description {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+.service-popup-description h4 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.service-popup-description p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #666;
+}
+
+.service-popup-footer {
+  margin-top: 25px;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.service-popup-footer .close-btn {
+  padding: 10px 24px;
+  background: #f0f0f0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.service-popup-footer .close-btn:hover {
+  background: #e0e0e0;
+}
+
+.chat-trigger-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.chatbot-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 99999;
+}
+
+.chatbot-panel {
+  width: min(100%, 390px);
+  height: 78vh;
+  max-height: 680px;
+  margin: auto 0;
+  border-radius: 18px 0 0 18px;
+  background: #fff;
+  box-shadow: -8px 0 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chatbot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 18px;
+  background: linear-gradient(135deg, #0f4c81, #1f7a8c);
+  color: #fff;
+}
+
+.chatbot-header h4 {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+
+.chatbot-header p {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.chatbot-close {
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.chatbot-body {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  background: #f6f8fb;
+}
+
+.chatbot-empty-state,
+.chatbot-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chatbot-intro,
+.chatbot-menu-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2a44;
+}
+
+.chatbot-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chatbot-option {
+  border: 1px solid #dfe7f0;
+  background: #fff;
+  color: #0f4c81;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.chatbot-option:hover {
+  background: #eef5ff;
+  border-color: #0f4c81;
+}
+
+.chatbot-message {
+  padding: 10px 12px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  max-width: 90%;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+.chatbot-message.bot {
+  background: #fff;
+  color: #1f2a44;
+  border: 1px solid #e5eaf2;
+}
+
+.chatbot-message.user {
+  margin-left: auto;
+  background: #0f4c81;
+  color: #fff;
+}
+
+.chatbot-input-row {
+  display: flex;
+  gap: 8px;
+  padding: 12px 14px;
+  border-top: 1px solid #e5eaf2;
+  background: #fff;
+}
+
+.chatbot-input-row input {
+  flex: 1;
+  border: 1px solid #dfe7f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.chatbot-input-row button {
+  border: none;
+  background: #0f4c81;
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+@media (max-width: 576px) {
+  .chatbot-panel {
+    width: 100%;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Custom scrollbar for popup */
+.service-popup-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.service-popup-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.service-popup-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.service-popup-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+/* Career Card */
+.career-item {
+  background: #f4a43d36;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+  height: 100%;
+  position: relative;
+}
+
+/* Hover Effect */
+.career-item:hover {
+  border-color: #d9a441;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Header */
+.career-header {
+  margin-bottom: 10px;
+}
+
+/* Title */
+.career-info h5 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+/* Meta info */
+.career-meta {
+  font-size: 14px;
+  color: #000;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+/* Skill */
+.career-skill {
+  font-size: 14px;
+  color: #d9a441;
+  font-weight: 500;
+}
+
+/* Description */
+.career-description {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #000;
+  line-height: 1.6;
+}
+
+/* Description paragraphs */
+.career-description p {
+  margin-bottom: 10px;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+  .career-info h5 {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 576px) {
+  .career-item {
+    padding: 20px;
+  }
+}
+.translate-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  width: fit-content;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.translate-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Hide Google branding bar */
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+body {
+  top: 0 !important;
+}
+
+/* Hide "Powered by Google" */
+.goog-logo-link,
+.goog-te-gadget span {
+  display: none !important;
+}
+
+.goog-te-gadget {
+  color: transparent !important;
+}
+
+/* Style dropdown */
+.goog-te-combo {
+  padding: 8px 12px !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 8px !important;
+  background: white !important;
+  font-size: 14px !important;
+  cursor: pointer;
+  outline: none;
+  min-width: 180px;
+}
+
+/* Remove extra Google wrapper spacing */
+#google_translate_element {
+  display: flex;
+  align-items: center;
+}
