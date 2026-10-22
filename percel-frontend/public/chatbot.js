@@ -2,7 +2,7 @@
  * Paarcel3u Embeddable Bilingual Chatbot Widget
  * State Machine Driven Decision-Tree Logic (English & Hindi)
  * 
- * Version: 1.0.0
+ * Version: 1.0.1
  * Pure Vanilla JavaScript (Zero external dependencies)
  */
 
@@ -84,7 +84,7 @@
     constructor(options = {}) {
       this.options = Object.assign({
         apiBase: '',
-        branchesUrl: 'branches.json',
+        branchesUrl: '/branches.json', /* FIXED: Absolute path for Vite */
         trackEndpoint: '/api/track',
         ticketEndpoint: '/api/support/ticket',
         autoOpen: false,
@@ -108,7 +108,6 @@
 
     // 1. DOM Hierarchy Construction
     initDOM() {
-      // Remove previous root if existing
       const existingRoot = document.getElementById('p3u-chatbot-root');
       if (existingRoot) existingRoot.remove();
 
@@ -116,7 +115,6 @@
       this.root.id = 'p3u-chatbot-root';
 
       this.root.innerHTML = `
-        <!-- Launcher Trigger Button -->
         <button type="button" class="p3u-launcher-btn" id="p3u-launcher-btn" aria-label="Open Customer Chat" title="Paarcel3u Chatbot">
           <span class="p3u-launcher-pulse"></span>
           <svg class="p3u-launcher-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -126,9 +124,7 @@
           <span class="p3u-launcher-close-icon">✕</span>
         </button>
 
-        <!-- Main Chat Window -->
         <div class="p3u-window" id="p3u-window" role="dialog" aria-modal="true" aria-label="Paarcel3u Virtual Assistant">
-          <!-- Header -->
           <div class="p3u-header">
             <div class="p3u-brand-info">
               <div class="p3u-avatar">
@@ -137,9 +133,7 @@
                 </svg>
               </div>
               <div class="p3u-brand-text">
-                <div class="p3u-brand-title">
-                  Paarcel3u Assistant
-                </div>
+                <div class="p3u-brand-title">Paarcel3u Assistant</div>
                 <div class="p3u-status-indicator">
                   <span class="p3u-status-dot"></span>
                   <span id="p3u-status-text">Online • 24/7 Support</span>
@@ -147,47 +141,28 @@
               </div>
             </div>
             <div class="p3u-header-controls">
-              <button type="button" class="p3u-header-btn" id="p3u-reset-btn" title="Reset Conversation / बातचीत रीसेट करें" aria-label="Reset Conversation">
-                ↺
-              </button>
-              <button type="button" class="p3u-header-btn" id="p3u-close-btn" title="Close Chat / चैट बंद करें" aria-label="Close Chat">
-                ✕
-              </button>
+              <button type="button" class="p3u-header-btn" id="p3u-reset-btn" title="Reset Conversation" aria-label="Reset Conversation">↺</button>
+              <button type="button" class="p3u-header-btn" id="p3u-close-btn" title="Close Chat" aria-label="Close Chat">✕</button>
             </div>
           </div>
 
-          <!-- Message History -->
           <div class="p3u-messages" id="p3u-messages"></div>
 
-          <!-- Interactive Input Area -->
           <div class="p3u-input-area" id="p3u-input-area">
-            <!-- Autocomplete suggestions dropdown -->
             <ul class="p3u-suggestions" id="p3u-suggestions"></ul>
-
-            <!-- Text Input Row -->
             <div class="p3u-input-row" id="p3u-input-row">
-              <input type="text" 
-                     class="p3u-input" 
-                     id="p3u-input" 
-                     placeholder="Select an option above..." 
-                     autocomplete="off" 
-                     disabled />
+              <input type="text" class="p3u-input" id="p3u-input" placeholder="Select an option above..." autocomplete="off" disabled />
               <button type="button" class="p3u-send-btn" id="p3u-send-btn" disabled aria-label="Send Message">
-                <svg viewBox="0 0 24 24">
-                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                </svg>
+                <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
               </button>
             </div>
-            <div class="p3u-footer-tag">
-              Official Support by <a href="http://paarcel3u.in" target="_blank" rel="noopener">Paarcel3u.in</a>
-            </div>
+            <div class="p3u-footer-tag">Official Support by <a href="http://paarcel3u.in" target="_blank" rel="noopener">Paarcel3u.in</a></div>
           </div>
         </div>
       `;
 
       document.body.appendChild(this.root);
 
-      // Element Caches
       this.launcherBtn = this.root.querySelector('#p3u-launcher-btn');
       this.chatWindow = this.root.querySelector('#p3u-window');
       this.messagesContainer = this.root.querySelector('#p3u-messages');
@@ -202,7 +177,6 @@
       }
     }
 
-    // 2. Preload Branch Dataset (Client-Side Filtering)
     async loadBranches() {
       try {
         const response = await fetch(this.options.branchesUrl);
@@ -216,17 +190,12 @@
       }
     }
 
-    // 3. Event Listeners
     setupEventListeners() {
-      // Launcher Toggle
       this.launcherBtn.addEventListener('click', () => this.toggle());
       this.closeBtn.addEventListener('click', () => this.close());
       this.resetBtn.addEventListener('click', () => this.resetConversation());
-
-      // Send Button
       this.sendBtn.addEventListener('click', () => this.handleUserInputSubmit());
 
-      // Input Key Handling (Enter & Suggestion Arrow navigation)
       this.inputField.addEventListener('keydown', (e) => {
         if (this.currentState === STATES.BRANCH_INPUT && this.currentSuggestions.length > 0) {
           if (e.key === 'ArrowDown') {
@@ -250,14 +219,12 @@
             }
           }
         }
-
         if (e.key === 'Enter') {
           e.preventDefault();
           this.handleUserInputSubmit();
         }
       });
 
-      // Autocomplete Live Typing (Debounced ~150ms)
       const onAutocomplete = debounce(() => {
         if (this.currentState === STATES.BRANCH_INPUT) {
           this.handleBranchSearch(this.inputField.value);
@@ -269,7 +236,6 @@
         onAutocomplete();
       });
 
-      // Close suggestions on outside click
       document.addEventListener('click', (e) => {
         if (!this.root.contains(e.target)) {
           this.hideSuggestions();
@@ -277,7 +243,6 @@
       });
     }
 
-    // Toggle & Visibility Controls
     toggle() {
       this.isOpen ? this.close() : this.open();
     }
@@ -304,11 +269,9 @@
       }, 50);
     }
 
-    // 4. Message Rendering Utilities
     appendBotMessage(text, options = null, richCardHTML = '') {
       const row = document.createElement('div');
       row.className = 'p3u-msg-row p3u-bot';
-
       let inner = `
         <div class="p3u-bubble-avatar">P</div>
         <div class="p3u-bubble">
@@ -326,13 +289,10 @@
           btn.type = 'button';
           btn.className = `p3u-option-btn ${opt.isMainMenu ? 'p3u-main-menu-btn' : ''}`;
           btn.innerHTML = `<span>${escapeHTML(opt.label)}</span> <span>→</span>`;
-          btn.addEventListener('click', () => {
-            opt.onClick();
-          });
+          btn.addEventListener('click', () => opt.onClick());
           optsContainer.appendChild(btn);
         });
       }
-
       this.messagesContainer.appendChild(row);
       this.scrollToBottom();
     }
@@ -340,9 +300,7 @@
     appendUserMessage(text) {
       const row = document.createElement('div');
       row.className = 'p3u-msg-row p3u-user';
-      row.innerHTML = `
-        <div class="p3u-bubble">${escapeHTML(text).replace(/\n/g, '<br/>')}</div>
-      `;
+      row.innerHTML = `<div class="p3u-bubble">${escapeHTML(text).replace(/\n/g, '<br/>')}</div>`;
       this.messagesContainer.appendChild(row);
       this.scrollToBottom();
     }
@@ -364,11 +322,9 @@
     }
 
     removeTypingIndicator() {
-      const indicators = this.messagesContainer.querySelectorAll('.p3u-typing-row');
-      indicators.forEach(el => el.remove());
+      this.messagesContainer.querySelectorAll('.p3u-typing-row').forEach(el => el.remove());
     }
 
-    // 5. Input Field Controls
     enableInput(placeholder, initialValue = '') {
       this.inputField.disabled = false;
       this.inputField.placeholder = placeholder;
@@ -393,24 +349,14 @@
       }
     }
 
-    // 6. STATE MACHINE TRANSITIONS & CONVERSATION WORKFLOW
-
-    // State 0: INIT / LANG_SELECT
     startConversation() {
       this.currentState = STATES.INIT;
       this.disableInput();
-
       this.appendBotMessage(
         "Please select your language / कृपया अपनी भाषा चुनें:",
         [
-          {
-            label: "English",
-            onClick: () => this.selectLanguage('en')
-          },
-          {
-            label: "हिंदी",
-            onClick: () => this.selectLanguage('hi')
-          }
+          { label: "English", onClick: () => this.selectLanguage('en') },
+          { label: "हिंदी", onClick: () => this.selectLanguage('hi') }
         ]
       );
     }
@@ -421,15 +367,11 @@
       this.transitionToMainMenu();
     }
 
-    // State 1: MAIN_MENU
     transitionToMainMenu() {
       this.currentState = STATES.MAIN_MENU;
       this.disableInput();
-
       const isHi = this.currentLang === 'hi';
-      const promptText = isHi
-        ? "आज हम आपकी क्या सहायता कर सकते हैं?"
-        : "How can I help you today?";
+      const promptText = isHi ? "आज हम आपकी क्या सहायता कर सकते हैं?" : "How can I help you today?";
 
       const options = [
         {
@@ -454,11 +396,9 @@
           }
         }
       ];
-
       this.appendBotMessage(promptText, options);
     }
 
-    // Helper: Main Menu Return Button
     getMainMenuOption() {
       const isHi = this.currentLang === 'hi';
       return [
@@ -473,7 +413,6 @@
       ];
     }
 
-    // Helper: Reset Conversation
     resetConversation() {
       this.messagesContainer.innerHTML = '';
       this.currentLang = 'en';
@@ -482,34 +421,22 @@
       this.startConversation();
     }
 
-    // State 2: Flow 1 — Tracking (TRACK_PROMPT)
     transitionToTrackPrompt() {
       this.currentState = STATES.TRACK_PROMPT;
       const isHi = this.currentLang === 'hi';
-
-      const botPrompt = isHi
-        ? "कृपया अपना ट्रैकिंग नंबर दर्ज करें:"
-        : "Please enter your Tracking ID:";
-
-      const placeholder = isHi
-        ? "उदा. P3U1001"
-        : "e.g. P3U1001";
-
+      const botPrompt = isHi ? "कृपया अपना ट्रैकिंग नंबर दर्ज करें:" : "Please enter your Tracking ID:";
+      const placeholder = isHi ? "उदा. P3U1001" : "e.g. P3U1001";
       this.appendBotMessage(botPrompt);
       this.enableInput(placeholder);
     }
 
     async handleTrackingSubmit(rawId) {
       const isHi = this.currentLang === 'hi';
-      // Sanitize: Strip all whitespace
       const sanitizedId = (rawId || '').replace(/\s+/g, '');
-
-      // Regex Validation: Must match /^[A-Za-z0-9]{4,25}$/
       const trackingRegex = /^[A-Za-z0-9]{4,25}$/;
+      
       if (!trackingRegex.test(sanitizedId)) {
-        const errorMsg = isHi
-          ? "अमान्य ट्रैकिंग नंबर। कृपया सही अक्षरांकीय कोड दर्ज करें।"
-          : "Invalid Tracking ID. Please enter a valid alphanumeric code.";
+        const errorMsg = isHi ? "अमान्य ट्रैकिंग नंबर। कृपया सही अक्षरांकीय कोड दर्ज करें।" : "Invalid Tracking ID. Please enter a valid alphanumeric code.";
         this.appendBotMessage(errorMsg);
         this.enableInput(isHi ? "उदा. P3U1001" : "e.g. P3U1001");
         return;
@@ -521,24 +448,17 @@
       try {
         let result = null;
         let statusCode = 200;
-
-        // Try live backend GET /api/track?id={TRACKING_ID}
         const endpointUrl = `${this.options.apiBase}${this.options.trackEndpoint}?id=${encodeURIComponent(sanitizedId)}`;
+        
         try {
-          const res = await fetch(endpointUrl, {
-            headers: { 'Accept': 'application/json' }
-          });
+          const res = await fetch(endpointUrl, { headers: { 'Accept': 'application/json' } });
           statusCode = res.status;
           if (res.ok) {
             result = await res.json();
           } else if (res.status === 404 || res.status === 500) {
-            // Respect actual HTTP response code
             result = null;
-          } else {
-            statusCode = res.status;
           }
         } catch (networkErr) {
-          // If network / static fallback is enabled
           if (this.options.mockFallback) {
             if (MOCK_TRACKING_DATA[sanitizedId]) {
               const mock = MOCK_TRACKING_DATA[sanitizedId];
@@ -548,7 +468,6 @@
               statusCode = 500;
               result = null;
             } else {
-              // Unrecognized tracking ID fallback -> 404
               statusCode = 404;
               result = null;
             }
@@ -557,12 +476,10 @@
           }
         }
 
-        // Artificial smooth UX delay
         await new Promise(r => setTimeout(r, 600));
         this.removeTypingIndicator();
 
         if (statusCode === 200 && result) {
-          // Render rich tracking card
           const cardHtml = `
             <div class="p3u-card">
               <div class="p3u-card-header">
@@ -570,70 +487,34 @@
                 <span class="p3u-card-badge status-in-transit">${escapeHTML(isHi ? result.status_hi : result.status_en)}</span>
               </div>
               <div class="p3u-card-body">
-                <div class="p3u-card-item">
-                  <strong>${isHi ? 'स्थिति:' : 'Status:'}</strong>
-                  <span>${escapeHTML(isHi ? result.status_hi : result.status_en)}</span>
-                </div>
-                <div class="p3u-card-item">
-                  <strong>${isHi ? 'डिलीवरी:' : 'Estimated Delivery:'}</strong>
-                  <span>${escapeHTML(result.eta)}</span>
-                </div>
-                <div class="p3u-card-item">
-                  <strong>${isHi ? 'शाखा संपर्क:' : 'Branch Contact:'}</strong>
-                  <a href="tel:${escapeHTML(result.branch_contact)}" style="color: inherit; text-decoration: underline;">
-                    ${escapeHTML(result.branch_contact)}
-                  </a>
-                </div>
-                <div class="p3u-card-item">
-                  <strong>${isHi ? 'दिशा-निर्देश:' : 'Directions:'}</strong>
-                  <a href="${escapeHTML(result.branch_map_url)}" target="_blank" rel="noopener noreferrer" class="p3u-card-link">
-                    ${isHi ? 'Google Maps पर देखें' : 'View on Google Maps'}
-                    <svg viewBox="0 0 24 24"><path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3m-2 16H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7z"/></svg>
-                  </a>
-                </div>
+                <div class="p3u-card-item"><strong>${isHi ? 'स्थिति:' : 'Status:'}</strong><span>${escapeHTML(isHi ? result.status_hi : result.status_en)}</span></div>
+                <div class="p3u-card-item"><strong>${isHi ? 'डिलीवरी:' : 'Estimated Delivery:'}</strong><span>${escapeHTML(result.eta)}</span></div>
+                <div class="p3u-card-item"><strong>${isHi ? 'शाखा संपर्क:' : 'Branch Contact:'}</strong><a href="tel:${escapeHTML(result.branch_contact)}" style="color: inherit; text-decoration: underline;">${escapeHTML(result.branch_contact)}</a></div>
+                <div class="p3u-card-item"><strong>${isHi ? 'दिशा-निर्देश:' : 'Directions:'}</strong><a href="${escapeHTML(result.branch_map_url)}" target="_blank" rel="noopener noreferrer" class="p3u-card-link">${isHi ? 'Google Maps पर देखें' : 'View on Google Maps'}<svg viewBox="0 0 24 24"><path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3m-2 16H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7z"/></svg></a></div>
               </div>
             </div>
           `;
-
-          const introMsg = isHi
-            ? "Paarcel3u से संपर्क करने के लिए धन्यवाद। आपके पार्सल की वर्तमान स्थिति:"
-            : "Hi! Thank you for reaching out to Paarcel3u. Here is the current status of your shipment:";
-
+          const introMsg = isHi ? "Paarcel3u से संपर्क करने के लिए धन्यवाद। आपके पार्सल की वर्तमान स्थिति:" : "Hi! Thank you for reaching out to Paarcel3u. Here is the current status of your shipment:";
           this.appendBotMessage(introMsg, this.getMainMenuOption(), cardHtml);
-
         } else if (statusCode === 404) {
-          const notFoundMsg = isHi
-            ? `आईडी '${escapeHTML(sanitizedId)}' का कोई पार्सल नहीं मिला। कृपया नंबर जांचें और पुनः प्रयास करें।`
-            : `No shipment found with ID '${escapeHTML(sanitizedId)}'. Please check the tracking number and try again.`;
+          const notFoundMsg = isHi ? `आईडी '${escapeHTML(sanitizedId)}' का कोई पार्सल नहीं मिला। कृपया नंबर जांचें और पुनः प्रयास करें।` : `No shipment found with ID '${escapeHTML(sanitizedId)}'. Please check the tracking number and try again.`;
           this.appendBotMessage(notFoundMsg, this.getMainMenuOption());
         } else {
-          const serverErrorMsg = isHi
-            ? "सर्वर से संपर्क नहीं हो पा रहा है। कृपया कुछ समय बाद पुनः प्रयास करें।"
-            : "Unable to retrieve tracking details right now. Please try again shortly.";
+          const serverErrorMsg = isHi ? "सर्वर से संपर्क नहीं हो पा रहा है। कृपया कुछ समय बाद पुनः प्रयास करें।" : "Unable to retrieve tracking details right now. Please try again shortly.";
           this.appendBotMessage(serverErrorMsg, this.getMainMenuOption());
         }
       } catch (err) {
         this.removeTypingIndicator();
-        const errText = isHi
-          ? "सर्वर से संपर्क नहीं हो पा रहा है। कृपया कुछ समय बाद पुनः प्रयास करें।"
-          : "Unable to retrieve tracking details right now. Please try again shortly.";
+        const errText = isHi ? "सर्वर से संपर्क नहीं हो पा रहा है। कृपया कुछ समय बाद पुनः प्रयास करें।" : "Unable to retrieve tracking details right now. Please try again shortly.";
         this.appendBotMessage(errText, this.getMainMenuOption());
       }
     }
 
-    // State 3: Flow 2 — Branch Details (BRANCH_INPUT)
     transitionToBranchInput() {
       this.currentState = STATES.BRANCH_INPUT;
       const isHi = this.currentLang === 'hi';
-
-      const botPrompt = isHi
-        ? "शाखा या शहर का नाम लिखें:"
-        : "Type the branch name or city:";
-
-      const placeholder = isHi
-        ? "उदा. कोलकाता, मुंबई, दिल्ली..."
-        : "e.g. Kolkata, Mumbai, Delhi...";
-
+      const botPrompt = isHi ? "शाखा या शहर का नाम लिखें:" : "Type the branch name or city:";
+      const placeholder = isHi ? "उदा. कोलकाता, मुंबई, दिल्ली..." : "e.g. Kolkata, Mumbai, Delhi...";
       this.appendBotMessage(botPrompt);
       this.enableInput(placeholder);
     }
@@ -644,20 +525,13 @@
         this.hideSuggestions();
         return;
       }
-
-      // Filter branches.json matching name_en, name_hi, address_en, or address_hi
       const matches = this.branches.filter(b => {
         const nameEn = (b.name_en || '').toLowerCase();
         const nameHi = (b.name_hi || '').toLowerCase();
         const addrEn = (b.address_en || '').toLowerCase();
         const addrHi = (b.address_hi || '').toLowerCase();
-        return nameEn.includes(trimmed) || 
-               nameHi.includes(trimmed) || 
-               addrEn.includes(trimmed) || 
-               addrHi.includes(trimmed);
+        return nameEn.includes(trimmed) || nameHi.includes(trimmed) || addrEn.includes(trimmed) || addrHi.includes(trimmed);
       });
-
-      // Max 4 suggestions
       this.currentSuggestions = matches.slice(0, 4);
       this.selectedSuggestionIndex = -1;
       this.renderSuggestions(trimmed);
@@ -676,29 +550,18 @@
         this.hideSuggestions();
         return;
       }
-
       this.suggestionsList.innerHTML = '';
       const isHi = this.currentLang === 'hi';
 
       this.currentSuggestions.forEach((branch, idx) => {
         const li = document.createElement('li');
         li.className = `p3u-suggestion-item ${idx === this.selectedSuggestionIndex ? 'p3u-selected' : ''}`;
-        
         const titleText = isHi ? branch.name_hi : branch.name_en;
         const subText = isHi ? branch.address_hi : branch.address_en;
-
-        li.innerHTML = `
-          <div class="p3u-suggestion-title">📍 ${this.highlightMatch(titleText, query)}</div>
-          <div class="p3u-suggestion-sub">${this.highlightMatch(subText, query)}</div>
-        `;
-
-        li.addEventListener('click', () => {
-          this.selectBranch(branch);
-        });
-
+        li.innerHTML = `<div class="p3u-suggestion-title">📍 ${this.highlightMatch(titleText, query)}</div><div class="p3u-suggestion-sub">${this.highlightMatch(subText, query)}</div>`;
+        li.addEventListener('click', () => this.selectBranch(branch));
         this.suggestionsList.appendChild(li);
       });
-
       this.suggestionsList.classList.add('p3u-visible');
     }
 
@@ -713,41 +576,20 @@
       this.hideSuggestions();
       const isHi = this.currentLang === 'hi';
       const branchName = isHi ? branch.name_hi : branch.name_en;
-
       this.appendUserMessage(branchName);
       this.disableInput();
 
       const cardHtml = `
         <div class="p3u-card">
-          <div class="p3u-card-header">
-            <span>📍 ${escapeHTML(isHi ? branch.name_hi : branch.name_en)}</span>
-          </div>
+          <div class="p3u-card-header"><span>📍 ${escapeHTML(isHi ? branch.name_hi : branch.name_en)}</span></div>
           <div class="p3u-card-body">
-            <div class="p3u-card-item">
-              <strong>${isHi ? 'शाखा:' : 'Branch:'}</strong>
-              <span>${escapeHTML(isHi ? branch.name_hi : branch.name_en)}</span>
-            </div>
-            <div class="p3u-card-item">
-              <strong>${isHi ? 'पता:' : 'Address:'}</strong>
-              <span>${escapeHTML(isHi ? branch.address_hi : branch.address_en)}</span>
-            </div>
-            <div class="p3u-card-item">
-              <strong>${isHi ? 'संपर्क:' : 'Contact:'}</strong>
-              <a href="tel:${escapeHTML(branch.contact)}" style="color: inherit; text-decoration: underline;">
-                ${escapeHTML(branch.contact)}
-              </a>
-            </div>
-            <div class="p3u-card-item">
-              <strong>${isHi ? 'स्थान:' : 'Location:'}</strong>
-              <a href="${escapeHTML(branch.map_link)}" target="_blank" rel="noopener noreferrer" class="p3u-card-link">
-                ${isHi ? 'Google Maps पर देखें' : 'View on Google Maps'}
-                <svg viewBox="0 0 24 24"><path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3m-2 16H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7z"/></svg>
-              </a>
-            </div>
+            <div class="p3u-card-item"><strong>${isHi ? 'शाखा:' : 'Branch:'}</strong><span>${escapeHTML(isHi ? branch.name_hi : branch.name_en)}</span></div>
+            <div class="p3u-card-item"><strong>${isHi ? 'पता:' : 'Address:'}</strong><span>${escapeHTML(isHi ? branch.address_hi : branch.address_en)}</span></div>
+            <div class="p3u-card-item"><strong>${isHi ? 'संपर्क:' : 'Contact:'}</strong><a href="tel:${escapeHTML(branch.contact)}" style="color: inherit; text-decoration: underline;">${escapeHTML(branch.contact)}</a></div>
+            <div class="p3u-card-item"><strong>${isHi ? 'स्थान:' : 'Location:'}</strong><a href="${escapeHTML(branch.map_link)}" target="_blank" rel="noopener noreferrer" class="p3u-card-link">${isHi ? 'Google Maps पर देखें' : 'View on Google Maps'}<svg viewBox="0 0 24 24"><path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3m-2 16H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7z"/></svg></a></div>
           </div>
         </div>
       `;
-
       const introMsg = isHi ? "शाखा का विवरण:" : "Here are our branch details:";
       this.appendBotMessage(introMsg, this.getMainMenuOption(), cardHtml);
     }
@@ -756,41 +598,26 @@
       this.hideSuggestions();
       const isHi = this.currentLang === 'hi';
       const query = (text || '').trim().toLowerCase();
-
-      // Check if user entered an exact or fuzzy match
-      const matched = this.branches.find(b => {
-        return (b.name_en && b.name_en.toLowerCase() === query) ||
-               (b.name_hi && b.name_hi.toLowerCase() === query) ||
-               (b.name_en && b.name_en.toLowerCase().includes(query)) ||
-               (b.name_hi && b.name_hi.toLowerCase().includes(query)) ||
-               (b.address_en && b.address_en.toLowerCase().includes(query)) ||
-               (b.address_hi && b.address_hi.toLowerCase().includes(query));
-      });
+      const matched = this.branches.find(b => 
+        (b.name_en && b.name_en.toLowerCase() === query) || (b.name_hi && b.name_hi.toLowerCase() === query) ||
+        (b.name_en && b.name_en.toLowerCase().includes(query)) || (b.name_hi && b.name_hi.toLowerCase().includes(query)) ||
+        (b.address_en && b.address_en.toLowerCase().includes(query)) || (b.address_hi && b.address_hi.toLowerCase().includes(query))
+      );
 
       if (matched) {
         this.selectBranch(matched);
       } else {
-        const notFoundMsg = isHi
-          ? "कोई शाखा नहीं मिली। कृपया नाम की जांच करें।"
-          : "No matching branch found. Please verify the branch name.";
+        const notFoundMsg = isHi ? "कोई शाखा नहीं मिली। कृपया नाम की जांच करें।" : "No matching branch found. Please verify the branch name.";
         this.appendBotMessage(notFoundMsg, this.getMainMenuOption());
       }
     }
 
-    // State 4: Flow 3 — Support Query (QUERY_INPUT -> CONTACT_INPUT)
     transitionToQueryInput() {
       this.currentState = STATES.QUERY_INPUT;
       this.pendingTicket = { query: '', contact: '' };
       const isHi = this.currentLang === 'hi';
-
-      const prompt = isHi
-        ? "कृपया अपनी समस्या या प्रश्न का विवरण लिखें:"
-        : "Please describe your query or problem in detail:";
-
-      const placeholder = isHi
-        ? "अपनी समस्या यहाँ लिखें..."
-        : "Describe your query here...";
-
+      const prompt = isHi ? "कृपया अपनी समस्या या प्रश्न का विवरण लिखें:" : "Please describe your query or problem in detail:";
+      const placeholder = isHi ? "अपनी समस्या यहाँ लिखें..." : "Describe your query here...";
       this.appendBotMessage(prompt);
       this.enableInput(placeholder);
     }
@@ -798,7 +625,6 @@
     handleQueryTextSubmit(queryText) {
       const sanitizedQuery = (queryText || '').trim();
       if (!sanitizedQuery) return;
-
       this.pendingTicket.query = sanitizedQuery;
       this.transitionToContactInput();
     }
@@ -806,15 +632,8 @@
     transitionToContactInput() {
       this.currentState = STATES.CONTACT_INPUT;
       const isHi = this.currentLang === 'hi';
-
-      const prompt = isHi
-        ? "कृपया अपना 10 अंकों का मोबाइल नंबर या ईमेल आईडी दर्ज करें ताकि हमारे प्रतिनिधि आपसे संपर्क कर सकें:"
-        : "Please enter your 10-digit mobile number or email address so our executive can contact you:";
-
-      const placeholder = isHi
-        ? "उदा. 9876543210 या name@domain.com"
-        : "e.g. 9876543210 or name@domain.com";
-
+      const prompt = isHi ? "कृपया अपना 10 अंकों का मोबाइल नंबर या ईमेल आईडी दर्ज करें ताकि हमारे प्रतिनिधि आपसे संपर्क कर सकें:" : "Please enter your 10-digit mobile number or email address so our executive can contact you:";
+      const placeholder = isHi ? "उदा. 9876543210 या name@domain.com" : "e.g. 9876543210 or name@domain.com";
       this.appendBotMessage(prompt);
       this.enableInput(placeholder);
     }
@@ -822,17 +641,10 @@
     async handleContactSubmit(contactText) {
       const isHi = this.currentLang === 'hi';
       const cleanContact = (contactText || '').trim();
-
-      // Mobile & Email Validation Regex
-      const mobileRegex = /^[6-9]\d{9}$/;
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      const isValid = mobileRegex.test(cleanContact) || emailRegex.test(cleanContact);
+      const isValid = /^[6-9]\d{9}$/.test(cleanContact) || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanContact);
 
       if (!isValid) {
-        const invalidMsg = isHi
-          ? "कृपया एक मान्य 10 अंकों का मोबाइल नंबर या ईमेल आईडी दर्ज करें।"
-          : "Please enter a valid 10-digit Indian mobile number or email address.";
+        const invalidMsg = isHi ? "कृपया एक मान्य 10 अंकों का मोबाइल नंबर या ईमेल आईडी दर्ज करें।" : "Please enter a valid 10-digit Indian mobile number or email address.";
         this.appendBotMessage(invalidMsg);
         this.enableInput(isHi ? "मोबाइल या ईमेल दर्ज करें..." : "Enter mobile or email...");
         return;
@@ -842,7 +654,6 @@
       this.disableInput(isHi ? "सबमिट कर रहे हैं..." : "Submitting...");
       const typingEl = this.showTypingIndicator();
 
-      // Payload Construction
       const payload = {
         query: this.pendingTicket.query,
         contact: this.pendingTicket.contact,
@@ -851,69 +662,37 @@
       };
 
       try {
-        const endpointUrl = `${this.options.apiBase}${this.options.ticketEndpoint}`;
-        await fetch(endpointUrl, {
+        await fetch(`${this.options.apiBase}${this.options.ticketEndpoint}`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify(payload)
-        }).catch(err => {
-          // Gracefully continue in mock/offline mode
-          console.info('[Paarcel3u Chatbot] Support ticket payload dispatched:', payload);
-        });
-      } catch (err) {
-        console.info('[Paarcel3u Chatbot] Ticket dispatch notice:', err);
-      }
+        }).catch(() => {});
+      } catch (err) {}
 
-      // Smooth artificial response pause
       await new Promise(r => setTimeout(r, 650));
       this.removeTypingIndicator();
 
-      // Render Required Acknowledgment Message
       const ackMsg = isHi
         ? "Paarcel3u से संपर्क करने के लिए धन्यवाद। हमारे कस्टमर सपोर्ट अधिकारी जल्द ही आपसे संपर्क करेंगे। आपका दिन शुभ हो!\n\nबातचीत के लिए धन्यवाद! हमें आपकी सहायता करके खुशी हुई। 😊 भविष्य में सहायता के लिए कभी भी संपर्क करें। आपका दिन मंगलमय हो! 🙏"
         : "Thank you for contacting Paarcel3u. Our customer support executive will contact you at the earliest. Wishing you a great day ahead!\n\nThanks for talking! Glad we could help you today. 😊 If you need any more help with your package later, just send us a message anytime! Have a great day! 🙏";
 
-      const resetOption = [
-        {
-          label: isHi ? "🔄 नई बातचीत शुरू करें" : "🔄 Start New Chat",
-          isMainMenu: true,
-          onClick: () => {
-            this.resetConversation();
-          }
-        }
-      ];
-
+      const resetOption = [{ label: isHi ? "🔄 नई बातचीत शुरू करें" : "🔄 Start New Chat", isMainMenu: true, onClick: () => this.resetConversation() }];
       this.appendBotMessage(ackMsg, resetOption);
     }
 
-    // 7. General User Input Handler Router
     handleUserInputSubmit() {
       const val = this.inputField.value;
       if (!val || !val.trim()) return;
-
       const userText = val.trim();
       this.appendUserMessage(userText);
       this.inputField.value = '';
       this.updateSendButtonState();
 
       switch (this.currentState) {
-        case STATES.TRACK_PROMPT:
-          this.handleTrackingSubmit(userText);
-          break;
-        case STATES.BRANCH_INPUT:
-          this.handleBranchSubmit(userText);
-          break;
-        case STATES.QUERY_INPUT:
-          this.handleQueryTextSubmit(userText);
-          break;
-        case STATES.CONTACT_INPUT:
-          this.handleContactSubmit(userText);
-          break;
-        default:
-          console.warn('[Paarcel3u Chatbot] Unexpected state for text input:', this.currentState);
+        case STATES.TRACK_PROMPT: this.handleTrackingSubmit(userText); break;
+        case STATES.BRANCH_INPUT: this.handleBranchSubmit(userText); break;
+        case STATES.QUERY_INPUT: this.handleQueryTextSubmit(userText); break;
+        case STATES.CONTACT_INPUT: this.handleContactSubmit(userText); break;
       }
     }
   }
@@ -929,14 +708,22 @@
     }
   };
 
-  // Auto-initialize when DOM is ready if script has data-auto-init
-  document.addEventListener('DOMContentLoaded', () => {
-    const scriptEl = document.currentScript || document.querySelector('script[src*="chatbot.js"]');
+  // Fixed Initialization to prevent React/Vite race conditions
+  function initP3uChatbot() {
     if (!window.Paarcel3uChatbot.instance) {
       window.Paarcel3uChatbot.init({
+        branchesUrl: '/branches.json',
+        mockFallback: true,
         autoOpen: false
       });
     }
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initP3uChatbot);
+  } else {
+    // If Vite has already loaded the DOM, initialize immediately
+    initP3uChatbot();
+  }
 
 })(window, document);

@@ -6,10 +6,17 @@
     <link rel="manifest" href="/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Paarcel - Before Time Everytime</title>
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chatbot CSS -->
+    <link rel="stylesheet" href="/chatbot.css" />
+
+    <!-- WhatsApp Widget Config -->
     <script>
     var url = 'https://kwiqreply.io/integrations/whatsapp-chat-window-widget-kwiqreply.js?1448';
     var s = document.createElement('script');
@@ -22,10 +29,10 @@
                   "backgroundColor":"#15e523",
                   "ctaText":"",
                   "borderRadius":"25",
-                  "marginLeft":"0",
-                  "marginBottom":"75",
-                  "marginRight":"15",
-                  "position":"right"
+                  "marginLeft":"20", /* Added margin left */
+                  "marginBottom":"24", /* Adjusted bottom margin */
+                  "marginRight":"0",
+                  "position":"left" /* Moved to LEFT to avoid overlapping Chatbot */
               },
               "brandSetting":{
                   "brandName":"Paarcel",
@@ -41,16 +48,21 @@
               }
             };
     s.onload = function() {
-      CreateWhatsappChatWidget(options);
+      if (typeof CreateWhatsappChatWidget === 'function') {
+        CreateWhatsappChatWidget(options);
+      }
     };
     var x = document.getElementsByTagName('script')[0];
     x.parentNode.insertBefore(s, x);
-</script>
+    </script>
   </head>
   <body>
     <div id="root"></div>
-     <script src="/js/jquerymin.js"></script>
+    <script src="/js/jquerymin.js"></script>
     <script src="/js/sources.js"></script>
     <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- Chatbot Engine JS -->
+    <script src="/chatbot.js" defer></script>
   </body>
 </html>
